@@ -13,16 +13,35 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Windows.Threading;
+
 namespace WPF___Animations
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
+   
     public partial class MainWindow : Window
     {
+        DispatcherTimer myTimer;
+        int TimeStep = 100; // ms
+        MyGraphic myGraphic;
         public MainWindow()
         {
             InitializeComponent();
+
+            myGraphic = new MyGraphic();
+            this.AddChild(myGraphic);
+
+            myGraphic.myObject.LoadImage();
+
+            myTimer = new DispatcherTimer();
+            myTimer.Interval = TimeSpan.FromMilliseconds(TimeStep);
+            myTimer.Tick += MyTimer_Tick;
+            myTimer.Start();
+        }
+
+        private void MyTimer_Tick(object sender, EventArgs e)
+        {
+            myGraphic.ReDraw();
+            myGraphic.myObject.MoveObjects();
         }
     }
 }
